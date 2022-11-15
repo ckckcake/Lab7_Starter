@@ -1,5 +1,5 @@
 // main.js
-/*jshint esversion: 11 */
+/* jshint esversion: 8 */
 // CONSTANTS
 const RECIPE_URLS = [
   'https://introweb.tech/assets/json/1_50-thanksgiving-side-dishes.json',
@@ -69,37 +69,38 @@ async function getRecipes() {
   if (localStorage.getItem('recipes') !== null) {
     return localStorage.getItem('recipes');
   }
-  // A2.empty array to hold fetched recipes
-  let fetchedRecipes = [];
-  // A3.Return new Promise. 
-  return new Promise(async (resolve, reject) => {
-    // A4.Loop through RECIPE_URLS 
-    for (let i = 0; i < RECIPE_URLS.length; i++) {
-      // A5. try / catch block. A6-A9 in the try portion, A10-A11 in the catch portion.
-      try {
-        // A6.For each URL in that array, fetch the URL
-        let response = await fetch(RECIPE_URLS[i])
-        // A7.For each fetch response, retrieve JSON from .json().
-        let recipeResponse = await response.json();
-        console.log(recipeResponse);
-        // A8. TODO - Add the new recipe to the recipes array
-        fetchedRecipes.push(recipeResponse);
-        // A9.if finished retrieving recipes, save recipes to storage using the function provided.
-        if (i == RECIPE_URLS.length) {
-          saveRecipesToStorage(fetchedRecipes);
-        }
-        //Then, pass the recipes array to the Promise's resolve() method. 
-        resolve(fetchedRecipes);
-      } catch (err) {
-        // A10. TODO - Log any errors from catch using console.error
-        // A11. TODO - Pass any errors to the Promise's reject() function
-        console.error(err);
-        reject(err);
-      }
-    }
-  })
- 
 }
+// A2.empty array to hold fetched recipes
+const fetchedRecipes = [];
+// A3.Return new Promise. 
+return new Promise(async (resolve, reject) => {
+  // A4.Loop through RECIPE_URLS 
+  for (let i = 0; i < RECIPE_URLS.length; i++) {
+    // A5. try / catch block. A6-A9 in the try portion, A10-A11 in the catch portion.
+    try {
+      // A6.For each URL in that array, fetch the URL
+      let response = await fetch(RECIPE_URLS[i]);
+      console.log("this is respone: " + response);
+      // A7.For each fetch response, retrieve JSON from .json().
+      let recipeResponse = await response.json();
+      console.log("this is recipe json: " + recipeResponse);
+      // A8. TODO - Add the new recipe to the recipes array
+      fetchedRecipes.push(recipeResponse);
+      // A9.if finished retrieving recipes, save recipes to storage using the function provided.
+      //if (i == RECIPE_URLS.length) {
+        console.log(i);
+        saveRecipesToStorage(fetchedRecipes);
+      //}
+      //Then, pass the recipes array to the Promise's resolve() method. 
+      resolve(fetchedRecipes);
+    } catch (err) {
+      // A10. TODO - Log any errors from catch using console.error
+      // A11. TODO - Pass any errors to the Promise's reject() function
+      console.error(err);
+      reject(err);
+    }
+  }
+})
 
 /**
  * Takes in an array of recipes, converts it to a string, and then
